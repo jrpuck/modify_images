@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, redirect, request, url_for
+import os
+from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from PIL import ImageFilter, Image, ImageEnhance
 
-from helpers import get_secure_filename_filepath
+from helpers import get_secure_filename_filepath,doawnload_from_s3
 
 bp = Blueprint('filters', __name__, url_prefix='/filters')
 
@@ -11,9 +12,10 @@ def blur():
     filename, filepath = get_secure_filename_filepath(filename)
     try:
         radius = int(request.json.get('radius'))
-        image = Image.open(filepath)
+        filestream = doawnload_from_s3(filename)
+        image = Image.open(filestream)
         blurred_image = image.filter(ImageFilter.GaussianBlur(radius))
-        blurred_image.save(filepath)
+        blurred_image.save(os.path.join(current_app.config['DOWNLOAD_FOLDER'], filename))
         return redirect(url_for('get_image', name=filename))
     except FileNotFoundError:
         return jsonify({'error': 'File not found'}), 404
