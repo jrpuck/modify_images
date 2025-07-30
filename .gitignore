@@ -1,2 +1,8 @@
 uploads
 .env
+*.pyc
+*.pyo
+*.pyd
+.env.*
+*.log
+instance/
