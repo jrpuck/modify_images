@@ -63,3 +63,8 @@ def upload_image():
 @app.route('/downloads/<name>')
 def get_image(name):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], name)
+
+
+if __name__ == '__main__':
+    # نستخدم host و port من Railway
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
