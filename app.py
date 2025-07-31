@@ -30,6 +30,10 @@ app.register_blueprint(actions_bp)
 app.register_blueprint(filters_bp)
 app.register_blueprint(android_bp)
 
+@app.route('/')
+def index():
+    return jsonify({'message': 'Welcome to the Image Processing API'}), 200
+
 @app.route('/images',methods=['GET','POST'])
 def upload_image():
     if request.method == 'POST':
