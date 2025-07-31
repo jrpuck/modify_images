@@ -19,8 +19,8 @@ app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
 app.config['S3_BUCKET'] = 'images-api-me'
-app.config['S3_KEY'] = "AWS_ACCESS_KEY_ID"
-app.config['S3_SECRET'] = "AWS_SECRET_ACCESS_KEY"
+app.config['S3_KEY'] = os.environ.get("AWS_ACCESS_KEY_ID")
+app.config['S3_SECRET'] = os.environ.get("AWS_SECRET_ACCESS_KEY")
 app.config['S3_LOCATION'] = 'https://images-api-me.s3.eu-west-3.amazonaws.com/uploads/'
 
 
@@ -37,6 +37,8 @@ def index():
 @app.route('/images',methods=['GET','POST'])
 def upload_image():
     if request.method == 'POST':
+        print("KEY:", app.config['S3_KEY'])
+        print("SECRET:", app.config['S3_SECRET'])
         if 'file' not in request.files:
             return jsonify({'error': 'No file was selected'}), 400
         
